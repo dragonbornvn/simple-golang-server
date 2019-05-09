@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Calculator</title>
+	<!-- Latest compiled and minified CSS & JS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
+</head>
+<body>
+	<div id="app">
+		<div class="col-lg-3">
+			<input class="col-xs-12 col-sm-12 col-md-12 col-lg-12 btn btn-default border" v-bind:value="( show == true ) ? value : tempValue ">
+				
+			</input>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-danger border" v-on:click=" AC() " >
+				AC
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border">
+				+/-
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border">
+				%
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('/')">
+				/
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('7')">
+				7
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('8')">
+				8
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('9')">
+				9
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('*')">
+				*
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('4')">
+				4
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('5')">
+				5
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('6')">
+				6
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('-')">
+				-
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('1')">
+				1
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('2')">
+				2
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('3')">
+				3
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('+')">
+				+
+			</div>
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-default border" @click="press('0')">
+				0
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default border" @click="press('.')">
+				.
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-primary border" @click="calculate">
+				=
+			</div>
+		</div>
+	</div>
+</body>
+<script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+<script type="text/javascript" >
+	var vm = new Vue({
+		data: {
+			value:"0",tempValue:"0",
+			show:true,
+			operator:"",
+			expression:""
+		},
+		methods: {
+			AC:function(){
+				this.value = "0";
+				this.tempValue = "0";
+				this.btnPressed = "";
+				this.operator = "";
+			},
+			press:function(key){
+				if ( key != "+" && key != "-" && key != "*" && key != "/" && key != "+/-" && key != "%" )
+				{
+					if ( key == "." ) 
+					{
+						if ( this.show == true )
+						{
+							if ( this.value.indexOf(".") < 0 ) 
+							{
+								this.value = this.value + key;
+							}
+						}else 
+						{
+							if ( this.tempValue.indexOf(".") < 0 ) 
+							{
+								this.tempValue = this.tempValue + key;
+							}
+						}
+					} else 
+					{
+						if ( this.show == true )
+						{
+							this.value = ( this.value == "0" ) ? key : this.value + key;
+						}else 
+						{
+							this.tempValue = ( this.tempValue == "0" ) ? key : this.tempValue + key;
+						}
+					}
+				}else 
+				{
+					console.log(key);
+					if ( this.operator > "" ){
+						this.calculate();
+						this.operator = key;
+					}else{
+						this.operator = key;
+						console.log(this.operator);
+						this.show = false;
+					}
+				}
+
+			},
+			calculate(){
+				vm.expression = vm.value + vm.operator + vm.tempValue;
+				vm.value = eval(vm.expression).toString();
+				vm.show = true;
+				vm.tempValue = "";
+				vm.operator = "";  
+				console.log(vm.expression);
+			}
+		}
+	})
+	vm.$mount('#app');
+</script>
+</html>

@@ -1,0 +1,7 @@
+SELECT categories.id,name,description
+FROM categories
+LEFT JOIN topics
+ON categories.id = topics.category_id;
+
+
+SELECT id,category_id,title,body,views,created_at,user_id FROM topics WHERE category_id=1;
